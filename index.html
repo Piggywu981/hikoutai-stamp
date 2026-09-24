@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>航空自衛隊スタイル写真ラベラー</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23111'/%3E%3Ctext x='12' y='17' font-size='14' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'%3E自%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<style>
+  :root{
+    --bg:#0e1116;
+    --panel:#171c24;
+    --panel-2:#1f2630;
+    --line:#2c3542;
+    --text:#e8edf4;
+    --muted:#8b97a8;
+    --accent:#d4a84b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Noto Sans JP","Noto Sans SC",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    display:grid;
+    grid-template-columns:340px 1fr;
+    gap:18px;
+    padding:18px;
+    min-height:100vh;
+    max-width:1500px;
+    margin:0 auto;
+  }
+  /* ===== 控制面板 ===== */
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px;
+    align-self:start;
+    position:sticky;
+    top:18px;
+    max-height:calc(100vh - 36px);
+    overflow:auto;
+  }
+  .panel h1{
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:.05em;
+    margin-bottom:4px;
+  }
+  .panel .sub{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:18px;
+    line-height:1.5;
+  }
+  .field{margin-bottom:14px}
+  .field label{
+    display:block;
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:.08em;
+    margin-bottom:6px;
+    text-transform:uppercase;
+  }
+  .field input[type=text]{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:8px;
+    padding:9px 11px;
+    font-size:13px;
+    font-family:inherit;
+    outline:none;
+  }
+  .field input[type=text]:focus{border-color:var(--accent)}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .seg{
+    display:flex;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .seg button{
+    flex:1;
+    background:transparent;
+    border:none;
+    color:var(--muted);
+    padding:8px 10px;
+    font-size:12px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .seg button.on{
+    background:var(--accent);
+    color:#111;
+    font-weight:700;
+  }
+  .presets{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:999px;
+    padding:5px 11px;
+    font-size:12px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .chip:hover{border-color:var(--accent)}
+  .actions{display:flex;gap:8px;margin-top:18px}
+  .btn{
+    flex:1;
+    border:none;
+    border-radius:8px;
+    padding:11px 12px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn-primary{background:var(--accent);color:#111}
+  .btn-ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
+  .btn:active{transform:translateY(1px)}
+  .drop{
+    border:1.5px dashed var(--line);
+    border-radius:10px;
+    padding:18px;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    cursor:pointer;
+    margin-bottom:14px;
+    transition:.15s;
+  }
+  .drop:hover,.drop.over{border-color:var(--accent);color:var(--text)}
+  .hint{font-size:11px;color:var(--muted);line-height:1.6;margin-top:6px}
+  /* ===== 预览区 ===== */
+  .stage{
+    background:
+      linear-gradient(45deg,#15191f 25%,transparent 25%,transparent 75%,#15191f 75%),
+      linear-gradient(45deg,#15191f 25%,#11151a 75%,#11151a 75%);
+    background-size:22px 22px;
+    background-position:0 0,11px 11px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    min-height:520px;
+  }
+  .stage canvas{
+    max-width:100%;
+    max-height:calc(100vh - 48px);
+    box-shadow:0 12px 40px rgba(0,0,0,.5);
+    display:block;
+  }
+  .placeholder{
+    color:var(--muted);
+    text-align:center;
+    font-size:13px;
+    line-height:1.8;
+  }
+  .placeholder svg{display:block;margin:0 auto 12px;opacity:.5}
+  .checkbox-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);margin-bottom:14px;cursor:pointer}
+  .checkbox-row input{accent-color:var(--accent);width:15px;height:15px}
+  @media (max-width:860px){
+    .app{grid-template-columns:1fr;padding:12px}
+    .panel{position:static;max-height:none}
+    .stage{min-height:300px;padding:12px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ 控制面板 ============ -->
+  <aside class="panel">
+    <h1>航空自衛隊スタイル 写真ラベラー</h1>
+    <div class="sub">任意の画像に「対象機」バーと「航空自衛隊撮影」クレジットを重ね、PNG として書き出します。</div>
+
+    <div class="drop" id="drop">
+      クリックまたはドラッグで画像を選択<br>
+      <span style="opacity:.6">JPG / PNG / WebP</span>
+    </div>
+    <input type="file" id="file" accept="image/*" hidden>
+
+    <div class="field">
+      <label>テーマ / Theme</label>
+      <div class="seg" id="themeSeg">
+        <button data-theme="dark" class="on">黒地に白文字</button>
+        <button data-theme="light">白地に黒文字</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>上部ラベル文言</label>
+      <input type="text" id="topText" value="対 象 機（初めて確認したY-9哨戒機）">
+      <div class="presets" style="margin-top:8px">
+        <button class="chip" data-top="対 象 機（初めて確認したY-9哨戒機）">Y-9</button>
+        <button class="chip" data-top="対 象 機（初めて確認したH-6爆撃機）">H-6</button>
+        <button class="chip" data-top="対 象 機（初めて確認したSu-27戦闘機）">Su-27</button>
+        <button class="chip" data-top="対 象 機（初めて確認したB-52H爆撃機）">B-52H</button>
+        <button class="chip" data-top="対 象 機（初めて確認したRC-135偵察機）">RC-135</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>クレジット文言（右下）</label>
+      <input type="text" id="creditText" value="航空自衛隊撮影">
+    </div>
+
+    <label class="checkbox-row"><input type="checkbox" id="showTop" checked> 上部ラベルを表示</label>
+    <label class="checkbox-row"><input type="checkbox" id="showCredit" checked> 右下クレジットを表示</label>
+
+    <div class="actions">
+      <button class="btn btn-ghost" id="resetBtn">リセット</button>
+      <button class="btn btn-primary" id="downloadBtn">PNG を保存</button>
+    </div>
+    <div class="hint">※ このツールはスタイルの模写用です。実際の発表資料として使用しないでください。</div>
+  </aside>
+
+  <!-- ============ 预览区 ============ -->
+  <main class="stage" id="stage">
+    <div class="placeholder" id="placeholder">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="5" width="18" height="14" rx="2"/>
+        <circle cx="9" cy="10" r="1.5"/>
+        <path d="M21 15l-4.5-4.5L9 18"/>
+      </svg>
+      画像を読み込むとここにプレビューが表示されます
+    </div>
+    <canvas id="canvas" hidden></canvas>
+  </main>
+
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const canvas = $('canvas');
+  const ctx = canvas.getContext('2d');
+  const drop = $('drop');
+  const fileInput = $('file');
+  const placeholder = $('placeholder');
+
+  let img = null;
+  let theme = 'dark'; // dark = 黒地白文字, light = 白地黒文字
+
+  // 页面内 toast（移动端 alert/webview 常被屏蔽）
+  function toast(msg){
+    let t = document.getElementById('toast');
+    if(!t){
+      t = document.createElement('div');
+      t.id = 'toast';
+      t.style.cssText = 'position:fixed;left:50%;bottom:32px;transform:translateX(-50%);background:rgba(0,0,0,.88);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;transition:opacity .2s;pointer-events:none;';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = '1';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(()=>{ t.style.opacity = '0'; }, 2200);
+  }
+
+  // ===== 事件绑定 =====
+  drop.addEventListener('click', ()=>fileInput.click());
+  fileInput.addEventListener('change', e=>{
+    if(e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  ['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{
+    e.preventDefault(); drop.classList.add('over');
+  }));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{
+    e.preventDefault(); drop.classList.remove('over');
+  }));
+  drop.addEventListener('drop', e=>{
+    if(e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+  });
+  // 整张图片拖入也支持
+  $('stage').addEventListener('dragover', e=>e.preventDefault());
+  $('stage').addEventListener('drop', e=>{
+    e.preventDefault();
+    if(e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+  });
+
+  function loadFile(f){
+    if(!/^image\//.test(f.type)) return toast('画像ファイルを選択してください');
+    const url = URL.createObjectURL(f);
+    const im = new Image();
+    im.onload = ()=>{ img = im; redraw(); URL.revokeObjectURL(url); toast('読み込みました'); };
+    im.onerror = ()=>{ URL.revokeObjectURL(url); toast('画像の読み込みに失敗しました'); };
+    im.src = url;
+  }
+
+  // 主题切换
+  $('themeSeg').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    theme = b.dataset.theme;
+    document.querySelectorAll('#themeSeg button').forEach(x=>x.classList.toggle('on', x===b));
+    redraw();
+  });
+
+  // 预设
+  document.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click', ()=>{
+      $('topText').value = c.dataset.top;
+      redraw();
+    });
+  });
+
+  // 输入实时重绘
+  ['topText','creditText'].forEach(id=>$(id).addEventListener('input', redraw));
+  $('showTop').addEventListener('change', redraw);
+  $('showCredit').addEventListener('change', redraw);
+  $('resetBtn').addEventListener('click', ()=>{
+    $('topText').value = '対 象 機（初めて確認したY-9哨戒機）';
+    $('creditText').value = '航空自衛隊撮影';
+    redraw();
+  });
+
+  $('downloadBtn').addEventListener('click', ()=>{
+    if(!img){ toast('先に画像を読み込んでください'); return; }
+    toast('書き出し中…');
+    canvas.toBlob(async blob=>{
+      if(!blob){ toast('書き出しに失敗しました'); return; }
+      const url = URL.createObjectURL(blob);
+      const file = new File([blob], 'jasdf-style.png', {type:'image/png'});
+
+      // 1) 优先：Web Share（系统分享面板 → 保存到相册/微信/文件）
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        try{
+          await navigator.share({files:[file], title:'jasdf-style.png'});
+          toast('シェアしました');
+          return;
+        }catch(e){ /* 用户取消或失败，继续 fallback */ }
+      }
+
+      // 2) 外部浏览器：直接 a.download 下载
+      try{
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'jasdf-style.png';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(()=>{ document.body.removeChild(a); }, 500);
+      }catch(e){}
+
+      // 3) 兜底：全屏预览 + "浏览器で開く"按钮
+      showPreviewModal(url);
+    }, 'image/png');
+  });
+
+  // 全屏预览弹窗（兜底）
+  function showPreviewModal(url){
+    let m = document.getElementById('previewModal');
+    if(!m){
+      m = document.createElement('div');
+      m.id = 'previewModal';
+      m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+      m.innerHTML =
+        '<img id="previewImg" style="max-width:100%;max-height:75%;box-shadow:0 8px 40px rgba(0,0,0,.6);" alt="">' +
+        '<div style="color:#fff;font-size:13px;margin-top:14px;text-align:center;line-height:1.7;opacity:.9">ここに長押し保存が効かない場合、<br>下のボタンから外部ブラウザで開いて保存してください</div>' +
+        '<div style="display:flex;gap:10px;margin-top:14px">' +
+          '<button id="previewOpen" style="background:#d4a84b;color:#111;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer">外部ブラウザで開く</button>' +
+          '<button id="previewClose" style="background:#2c3542;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;cursor:pointer">閉じる</button>' +
+        '</div>';
+      document.body.appendChild(m);
+      m.addEventListener('click', e=>{ if(e.target === m) m.remove(); });
+      m.querySelector('#previewClose').addEventListener('click', ()=>m.remove());
+      m.querySelector('#previewOpen').addEventListener('click', ()=>{
+        window.open(url, '_blank');
+      });
+    }
+    m.querySelector('#previewImg').src = url;
+    m.style.display = 'flex';
+  }
+
+  // ===== 核心绘制 =====
+  function redraw(){
+    if(!img) return;
+    placeholder.hidden = true;
+    canvas.hidden = false;
+
+    const W = img.naturalWidth;
+    const H = img.naturalHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    // 底图
+    ctx.drawImage(img, 0, 0, W, H);
+
+    const isDark = theme === 'dark';
+    const barBg   = isDark ? '#000000' : '#ffffff';
+    const barFg   = isDark ? '#ffffff' : '#000000';
+
+    // ---- 顶部标签条 ----
+    if($('showTop').checked){
+      const text = $('topText').value.trim();
+      if(text){
+        const marginX   = Math.round(W * 0.015);
+        const barH      = Math.round(H * 0.085);
+        const fontSize  = Math.round(barH * 0.62);
+        const barY      = Math.round(H * 0.012);
+
+        ctx.fillStyle = barBg;
+        ctx.fillRect(marginX, barY, W - marginX*2, barH);
+
+        ctx.fillStyle = barFg;
+        ctx.font = `700 ${fontSize}px "Noto Sans JP", "Noto Sans SC", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, W/2, barY + barH/2 + fontSize*0.04);
+      }
+    }
+
+    // ---- 右下角 credit ----
+    if($('showCredit').checked){
+      const text = $('creditText').value.trim();
+      if(text){
+        const fontSize  = Math.round(H * 0.045);
+        const padX      = Math.round(fontSize * 0.55);
+        const padY      = Math.round(fontSize * 0.35);
+        ctx.font = `700 ${fontSize}px "Noto Sans JP", "Noto Sans SC", sans-serif`;
+        const tw = ctx.measureText(text).width;
+        const boxW = tw + padX*2;
+        const boxH = fontSize + padY*2;
+        const gap = Math.round(W * 0.015);
+        const boxX = W - boxW - gap;
+        const boxY = H - boxH - gap;
+
+        ctx.fillStyle = barBg;
+        ctx.fillRect(boxX, boxY, boxW, boxH);
+        ctx.fillStyle = barFg;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, boxX + boxW/2, boxY + boxH/2 + fontSize*0.04);
+      }
+    }
+  }
+})();
+</script>
+</body>
+</html>
