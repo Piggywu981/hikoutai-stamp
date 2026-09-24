@@ -13,6 +13,7 @@
 [![Single File](https://img.shields.io/badge/single%20file-d4a84b?style=for-the-badge)](index.html)
 [![Zero Dependency](https://img.shields.io/badge/zero%20dependency-6e7681?style=for-the-badge)](index.html)
 [![Gitee Mirror](https://img.shields.io/badge/Gitee%20mirror-c71d23?style=for-the-badge)](https://gitee.com/PiggyWu981/hikoutai-stamp)
+[![License](https://img.shields.io/badge/license-GPL--3.0-blue?style=for-the-badge)](../../LICENSE)
 
 </div>
 

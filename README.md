@@ -13,6 +13,7 @@
 [![单文件](https://img.shields.io/badge/%E5%8D%95%E6%96%87%E4%BB%B6-d4a84b?style=for-the-badge)](index.html)
 [![零依赖](https://img.shields.io/badge/%E9%9B%B6%E4%BE%9D%E8%B5%96-6e7681?style=for-the-badge)](index.html)
 [![Gitee 镜像](https://img.shields.io/badge/Gitee%20%E9%95%9C%E5%83%8F-c71d23?style=for-the-badge)](https://gitee.com/PiggyWu981/hikoutai-stamp)
+[![许可证](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-GPL--3.0-blue?style=for-the-badge)](LICENSE)
 
 </div>
 
