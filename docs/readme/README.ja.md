@@ -2,6 +2,10 @@
 <a href="../../README.md">简体中文</a> | <a href="README.en_US.md">English</a> | 日本語
 </div>
 
+<p align="center">
+  <img src="../../assets/banner.svg" alt="hikoutai-stamp banner" width="100%">
+</p>
+
 <h1 align="center">hikoutai-stamp</h1>
 <p align="center">航空自衛隊スタイルの写真ラベリングツール</p>
 

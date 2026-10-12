@@ -2,6 +2,10 @@
 简体中文 | <a href="docs/readme/README.en_US.md">English</a> | <a href="docs/readme/README.ja.md">日本語</a>
 </div>
 
+<p align="center">
+  <img src="assets/banner.svg" alt="hikoutai-stamp banner" width="100%">
+</p>
+
 <h1 align="center">hikoutai-stamp</h1>
 <p align="center">航空自卫队公开照片风格的图片标注工具</p>
 

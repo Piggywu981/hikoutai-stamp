@@ -2,6 +2,10 @@
 <a href="../../README.md">简体中文</a> | English | <a href="README.ja.md">日本語</a>
 </div>
 
+<p align="center">
+  <img src="../../assets/banner.svg" alt="hikoutai-stamp banner" width="100%">
+</p>
+
 <h1 align="center">hikoutai-stamp</h1>
 <p align="center">A photo annotation tool in the style of Japan Air Self-Defense Force public-release photographs</p>
 
